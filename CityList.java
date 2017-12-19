@@ -3,6 +3,8 @@ package Main;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,9 +30,10 @@ public class CityList {
 
 	public List<String> searchCities(String city){
 
+		// Return all the cities from city list that contains the name
 		List<String> resultCities = new ArrayList<String>();
 		for(String s : this.cities){
-			if(s.contains(city)){
+			if(s.startsWith(city)){
 				resultCities.add(s);
 			}
 		}
@@ -47,16 +50,27 @@ public class CityList {
 
 		JSONArray jsonarray = (JSONArray) obj;
 
+		// Add json objects to arraylist
 		for(Object c : jsonarray){
 			JSONObject jsonObject = (JSONObject) c;
 			cities.add(jsonObject.get("name").toString());
 		}
 
-		// add elements to al, including duplicates
+		// remove duplicates
 		Set<String> hs = new HashSet<>();
 		hs.addAll(this.cities);
 		this.cities.clear();
 		this.cities.addAll(hs);
+
+		// Sort the list
+		Collections.sort(this.cities, new Comparator<String>() {
+	        @Override
+	        public int compare(String a, String b)
+	        {
+
+	            return  a.compareTo(b);
+	        }
+	    });
 	}
 
 	public static String readFile(String filename) {
